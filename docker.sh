@@ -15,7 +15,7 @@ for homedir in /home/*; do
 
 	if [ -f "${homedir}/.ssh/authorized_keys" ]; then
 		# add to every unprefixed key additional parameters
-		sed -i 's/^\s*ssh-rsa/command="borg serve --restrict-to-path ~\/",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc ssh-rsa/' ${homedir}/.ssh/authorized_keys
+		sed -i 's/^\s*ssh-/command="borg serve --restrict-to-path ~\/",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc ssh-/' ${homedir}/.ssh/authorized_keys
 	else
 		echo "WARNING: No SSH authorized_keys found for ${_NAME}!"
 	fi
