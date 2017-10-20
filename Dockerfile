@@ -3,9 +3,11 @@ FROM frolvlad/alpine-glibc
 
 ARG BORG_VERSION=1.1.0
 
-RUN apk add --update \
+RUN apk update \
+ && apk add --virtual .deps \
       ca-certificates \
       curl \
+ && apk add \
       openssh \
 # && curl -Lo /usr/local/bin/borg \
 #      https://github.com/borgbackup/borg/releases/download/${BORG_VERSION}/borg-linux64 \
@@ -13,9 +15,7 @@ RUN apk add --update \
       https://github.com/borgbackup/borg/releases/download/${BORG_VERSION}/borg-linux64 \
  && chmod +x /bin/borg \
  && cp -r /etc/ssh /etc/ssh.sav \
- && apk del \
-      ca-certificates \
-      curl \
+ && apk del .deps \
  && rm -rf \
       /etc/motd \
       /var/cache/apk/*
