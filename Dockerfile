@@ -1,7 +1,7 @@
 FROM frolvlad/alpine-glibc
 # the borg-linux64 executable is hardlinked to glibc default alpine does not provide it
 
-ARG BORG_VERSION=1.0.10
+ARG BORG_VERSION=1.1.0
 
 RUN apk add --update \
       ca-certificates \
