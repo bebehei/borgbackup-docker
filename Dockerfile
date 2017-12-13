@@ -1,24 +1,36 @@
-FROM frolvlad/alpine-glibc
-# the borg-linux64 executable is hardlinked to glibc default alpine does not provide it
+FROM alpine:3.7
 
 ARG BORG_VERSION=1.1.3
 
-RUN apk update \
- && apk add --virtual .deps \
-      ca-certificates \
-      curl \
- && apk add \
+RUN true \
+ && apk add --no-cache \
+      acl \
       openssh \
-# && curl -Lo /usr/local/bin/borg \
-#      https://github.com/borgbackup/borg/releases/download/${BORG_VERSION}/borg-linux64 \
- && curl -Lo /bin/borg \
-      https://github.com/borgbackup/borg/releases/download/${BORG_VERSION}/borg-linux64 \
- && chmod +x /bin/borg \
+      openssl \
+      py3-lz4 \
+      python3 \
+ && apk add --no-cache --virtual .deps \
+      acl-dev \
+      alpine-sdk \
+      git \
+      linux-headers \
+      lz4-dev \
+      openssl-dev \
+      python3-dev \
+ && git clone https://github.com/borgbackup/borg.git /srv/borg \
+ && git -C /srv/borg checkout ${BORG_VERSION} \
+# shutil cannot copy CHANGES.rst, as it is a symlink
+# See https://github.com/docker-library/python/issues/155
+ && rm /srv/borg/CHANGES.rst \
+ && python3 -m pip install Cython \
+ && python3 -m pip install /srv/borg \
  && cp -r /etc/ssh /etc/ssh.sav \
  && apk del .deps \
  && rm -rf \
       /etc/motd \
-      /var/cache/apk/*
+      /var/cache/apk/* \
+      /srv/borg \
+ && true
 
 ADD docker.sh /srv/docker-entry
 
