@@ -24,6 +24,7 @@ RUN true \
  && rm /srv/borg/CHANGES.rst \
  && python3 -m pip install Cython \
  && python3 -m pip install /srv/borg \
+ && python3 -m pip uninstall -y Cython \
  && cp -r /etc/ssh /etc/ssh.sav \
  && apk del .deps \
  && rm -rf \
